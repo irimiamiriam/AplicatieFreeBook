@@ -64,6 +64,12 @@
   <ItemGroup>
     <Compile Include="DataAcces\DataBaseHelper.cs" />
     <Compile Include="DataAcces\SqlDataAccess.cs" />
+    <Compile Include="Forms\AfiseazaCarte.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AfiseazaCarte.Designer.cs">
+      <DependentUpon>AfiseazaCarte.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CreeazaContFreeBook.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +97,9 @@
     <Compile Include="Models\UtilizatorModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\AfiseazaCarte.resx">
+      <DependentUpon>AfiseazaCarte.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CreeazaContFreeBook.resx">
       <DependentUpon>CreeazaContFreeBook.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,6 +131,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resurse\cartipdf\1.pdf" />
+    <None Include="Resurse\cartipdf\10.pdf" />
+    <None Include="Resurse\cartipdf\11.pdf" />
+    <None Include="Resurse\cartipdf\12.pdf" />
+    <None Include="Resurse\cartipdf\13.pdf" />
+    <None Include="Resurse\cartipdf\14.pdf" />
+    <None Include="Resurse\cartipdf\15.pdf" />
+    <None Include="Resurse\cartipdf\16.pdf" />
+    <None Include="Resurse\cartipdf\17.pdf" />
+    <None Include="Resurse\cartipdf\18.pdf" />
+    <None Include="Resurse\cartipdf\19.pdf" />
+    <None Include="Resurse\cartipdf\2.pdf" />
+    <None Include="Resurse\cartipdf\20.pdf" />
+    <None Include="Resurse\cartipdf\21.pdf" />
+    <None Include="Resurse\cartipdf\22.pdf" />
+    <None Include="Resurse\cartipdf\23.pdf" />
+    <None Include="Resurse\cartipdf\24.pdf" />
+    <None Include="Resurse\cartipdf\3.pdf" />
+    <None Include="Resurse\cartipdf\4.pdf" />
+    <None Include="Resurse\cartipdf\5.pdf" />
+    <None Include="Resurse\cartipdf\6.pdf" />
+    <None Include="Resurse\cartipdf\7.pdf" />
+    <None Include="Resurse\cartipdf\8.pdf" />
+    <None Include="Resurse\cartipdf\9.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

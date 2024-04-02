@@ -35,6 +35,8 @@
             this.imprumutTab = new System.Windows.Forms.TabPage();
             this.statisticiTab = new System.Windows.Forms.TabPage();
             this.dataGridCartiImprumut = new System.Windows.Forms.DataGridView();
+            this.disponibilLabel = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.disponibilTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridCartiDisponibile)).BeginInit();
@@ -82,11 +84,13 @@
             this.dataGridCartiDisponibile.Name = "dataGridCartiDisponibile";
             this.dataGridCartiDisponibile.RowHeadersWidth = 82;
             this.dataGridCartiDisponibile.RowTemplate.Height = 33;
-            this.dataGridCartiDisponibile.Size = new System.Drawing.Size(1201, 759);
+            this.dataGridCartiDisponibile.Size = new System.Drawing.Size(1193, 529);
             this.dataGridCartiDisponibile.TabIndex = 0;
             // 
             // imprumutTab
             // 
+            this.imprumutTab.Controls.Add(this.progressBar);
+            this.imprumutTab.Controls.Add(this.disponibilLabel);
             this.imprumutTab.Controls.Add(this.dataGridCartiImprumut);
             this.imprumutTab.Location = new System.Drawing.Point(8, 39);
             this.imprumutTab.Name = "imprumutTab";
@@ -114,8 +118,26 @@
             this.dataGridCartiImprumut.Name = "dataGridCartiImprumut";
             this.dataGridCartiImprumut.RowHeadersWidth = 82;
             this.dataGridCartiImprumut.RowTemplate.Height = 33;
-            this.dataGridCartiImprumut.Size = new System.Drawing.Size(1201, 759);
+            this.dataGridCartiImprumut.Size = new System.Drawing.Size(1191, 557);
             this.dataGridCartiImprumut.TabIndex = 1;
+            this.dataGridCartiImprumut.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridCartiImprumut_CellDoubleClick);
+            // 
+            // disponibilLabel
+            // 
+            this.disponibilLabel.AutoSize = true;
+            this.disponibilLabel.Location = new System.Drawing.Point(71, 648);
+            this.disponibilLabel.Name = "disponibilLabel";
+            this.disponibilLabel.Size = new System.Drawing.Size(70, 25);
+            this.disponibilLabel.TabIndex = 2;
+            this.disponibilLabel.Text = "label1";
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(463, 636);
+            this.progressBar.Maximum = 3;
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(700, 66);
+            this.progressBar.TabIndex = 3;
             // 
             // MeniuFreeBook
             // 
@@ -132,6 +154,7 @@
             this.disponibilTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridCartiDisponibile)).EndInit();
             this.imprumutTab.ResumeLayout(false);
+            this.imprumutTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridCartiImprumut)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -147,5 +170,7 @@
         private System.Windows.Forms.TabPage statisticiTab;
         private System.Windows.Forms.DataGridView dataGridCartiDisponibile;
         private System.Windows.Forms.DataGridView dataGridCartiImprumut;
+        private System.Windows.Forms.Label disponibilLabel;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }

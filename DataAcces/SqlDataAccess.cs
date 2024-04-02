@@ -25,6 +25,9 @@ namespace AplicatieFreeBook.DataAcces
         {
             return ConfigurationManager.AppSettings["UtilizatoriFile"];
         }
-
+        public static string GetPdfFolder()
+        {
+            return ConfigurationManager.AppSettings["CartiPdfFolder"];
+        }
     }
 }

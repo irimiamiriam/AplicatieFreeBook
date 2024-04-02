@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -187,7 +188,7 @@ namespace AplicatieFreeBook.DataAcces
             return utilizator;
         }
 
-        public static DataTable GetCarti()
+        public static DataTable GetCartiDisponibile()
         {
            
             DataTable dataTable = new DataTable();
@@ -212,5 +213,80 @@ namespace AplicatieFreeBook.DataAcces
 
             return dataTable;
         }
+
+        public static DataTable GetCartiImprumutate(string email)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Titlu");
+            dataTable.Columns.Add("Autor");
+            dataTable.Columns.Add("Data Imprumut");
+            dataTable.Columns.Add("Data Disponibilitate");
+            using (SqlConnection con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                string cmdText = "Select * from imprumut where @email=email";
+                using (SqlCommand cmd = new SqlCommand(cmdText, con))
+                {
+                    cmd.Parameters.AddWithValue("@email", email);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string[] detalii = CarteImprumut(Convert.ToInt32(reader[1]));
+                            DateTime dataImprumut = DateTime.ParseExact(reader[3].ToString(), "M/d/yyyy hh:mm:ss tt", null);
+                            DateTime dataDisponibil = dataImprumut.AddDays(30);
+                            dataTable.Rows.Add(detalii[0], detalii[1], dataImprumut, dataDisponibil);
+
+                        }
+                    }
+                }
+            }
+
+            return dataTable;
+        }
+
+        public static string[] CarteImprumut(int id)
+        {
+            string[] detaliicarte= new string[2];
+            
+            using(SqlConnection  con = new SqlConnection(_connectionstring)) 
+            {
+                con.Open();
+                string cmdText = "Select titlu, autor from carti where id_carte=@id";
+                using (SqlCommand cmd = new SqlCommand(cmdText, con))
+                {
+                    cmd.Parameters.AddWithValue("@id",id);
+                    using(SqlDataReader reader= cmd.ExecuteReader())
+                    {
+                        reader.Read();
+                        detaliicarte[0] = reader[0].ToString();
+                        detaliicarte[1] = reader[1].ToString();
+
+                    }
+                }
+            }
+            return detaliicarte; 
+        }
+
+        public static int GetCarteId(string titlu)
+        {
+            int carteId = 0;
+            using(SqlConnection con = new SqlConnection(_connectionstring)) 
+            {
+                con.Open();
+                string cmdText = "Select id_carte from carti where titlu=@titlu";
+                using(SqlCommand cmd= new SqlCommand(cmdText, con))
+                {
+                    cmd.Parameters.AddWithValue("@titlu", titlu);
+                    using(SqlDataReader reader= cmd.ExecuteReader()) 
+                    {
+
+                        while (reader.Read()) { carteId = Convert.ToInt32(reader[0]); }
+                    }
+                }
+            }
+            return carteId;
+        }
+
     }
 }
