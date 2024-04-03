@@ -51,6 +51,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -94,6 +96,8 @@
     <Compile Include="Forms\MeniuFreeBook.Designer.cs">
       <DependentUpon>MeniuFreeBook.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\CarteImprumutModel.cs" />
+    <Compile Include="Models\CarteModel.cs" />
     <Compile Include="Models\UtilizatorModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

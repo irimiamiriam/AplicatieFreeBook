@@ -31,13 +31,13 @@ namespace AplicatieFreeBook.DataAcces
             }
         }
 
-       public static void DeleteDatabaseData(SqlConnection con)
+        public static void DeleteDatabaseData(SqlConnection con)
         {
             SqlCommand cmdDeleteCarti = new SqlCommand("Delete from carti", con);
             SqlCommand cmdDeleteUtilizatori = new SqlCommand("Delete from utilizatori", con);
             SqlCommand cmdDeleteImprumuturi = new SqlCommand("Delete from imprumut", con);
-            SqlCommand cmdResetCarti = new SqlCommand("DBCC CHECKIDENT (carti, RESEED, 0)",con);
-            SqlCommand cmdResetImprumut= new SqlCommand("DBCC CHECKIDENT (imprumut, RESEED, 0)", con);
+            SqlCommand cmdResetCarti = new SqlCommand("DBCC CHECKIDENT (carti, RESEED, 0)", con);
+            SqlCommand cmdResetImprumut = new SqlCommand("DBCC CHECKIDENT (imprumut, RESEED, 0)", con);
             cmdDeleteCarti.ExecuteNonQuery();
             cmdDeleteImprumuturi.ExecuteNonQuery();
             cmdDeleteUtilizatori.ExecuteNonQuery();
@@ -45,89 +45,89 @@ namespace AplicatieFreeBook.DataAcces
             cmdResetImprumut.ExecuteNonQuery();
 
         }
-        
+
         public static void InsertIntoCarti(SqlConnection con)
         {
-             
-                string cmdInsert = "Insert into carti (titlu,autor ,gen) values (@titlu, @autor, @gen)";
-                using (StreamReader reader = new StreamReader(_cartipath))
+
+            string cmdInsert = "Insert into carti (titlu,autor ,gen) values (@titlu, @autor, @gen)";
+            using (StreamReader reader = new StreamReader(_cartipath))
+            {
+                while (reader.Peek() > 0)
                 {
-                    while (reader.Peek() > 0)
+                    string line = reader.ReadLine();
+                    var splitedline = line.Split('*');
+                    using (SqlCommand cmd = new SqlCommand(cmdInsert, con))
                     {
-                        string line = reader.ReadLine();
-                        var splitedline = line.Split('*');
-                        using (SqlCommand cmd = new SqlCommand(cmdInsert, con))
-                        {
-                            cmd.Parameters.AddWithValue("@titlu", splitedline[0]);
-                            cmd.Parameters.AddWithValue("@autor", splitedline[1]);
-                            cmd.Parameters.AddWithValue("@gen", splitedline[2]);
-                            cmd.ExecuteNonQuery();
-                        }
+                        cmd.Parameters.AddWithValue("@titlu", splitedline[0]);
+                        cmd.Parameters.AddWithValue("@autor", splitedline[1]);
+                        cmd.Parameters.AddWithValue("@gen", splitedline[2]);
+                        cmd.ExecuteNonQuery();
                     }
                 }
+            }
 
-            
+
 
         }
         public static void InsertIntoUtilizatori(SqlConnection con)
         {
-           
-                string cmdInsert = "Insert into utilizatori values (@email, @parola, @nume, @prenume)";
-                using (StreamReader reader = new StreamReader(_utilizatoripath))
+
+            string cmdInsert = "Insert into utilizatori values (@email, @parola, @nume, @prenume)";
+            using (StreamReader reader = new StreamReader(_utilizatoripath))
+            {
+                while (reader.Peek() > 0)
                 {
-                    while (reader.Peek() > 0)
+                    string line = reader.ReadLine();
+                    var splitedline = line.Split('*');
+                    using (SqlCommand cmd = new SqlCommand(cmdInsert, con))
                     {
-                        string line = reader.ReadLine();
-                        var splitedline = line.Split('*');
-                        using (SqlCommand cmd = new SqlCommand(cmdInsert, con))
-                        {
-                            cmd.Parameters.AddWithValue("@email", splitedline[0]);
-                            cmd.Parameters.AddWithValue("@parola", splitedline[1]);
-                            cmd.Parameters.AddWithValue("@nume", splitedline[2]);
-                            cmd.Parameters.AddWithValue("@prenume", splitedline[3]);
-                            cmd.ExecuteNonQuery();
-                        }
+                        cmd.Parameters.AddWithValue("@email", splitedline[0]);
+                        cmd.Parameters.AddWithValue("@parola", splitedline[1]);
+                        cmd.Parameters.AddWithValue("@nume", splitedline[2]);
+                        cmd.Parameters.AddWithValue("@prenume", splitedline[3]);
+                        cmd.ExecuteNonQuery();
                     }
-                
+                }
+
 
             }
         }
         public static void InsertIntoImprumuturi(SqlConnection con)
         {
             int idCarte = 0;
-           
-                string cmdInsert = "Insert into imprumut (id_carte,email,data_imprumut) values (@id, @email, @data)";
-                string cmdFindId = "Select id_carte from carti where titlu=@titlu";
-                
-                using (StreamReader reader = new StreamReader(_imprumuturipath))
-                {
-                    while (reader.Peek() > 0)
-                    {
-                        string line = reader.ReadLine();
-                        var splitedline = line.Split('*');
 
-                      using(SqlCommand cmdFind = new SqlCommand(cmdFindId, con))
-                     {
-                            cmdFind.Parameters.AddWithValue("@titlu", splitedline[0]);
+            string cmdInsert = "Insert into imprumut (id_carte,email,data_imprumut) values (@id, @email, @data)";
+            string cmdFindId = "Select id_carte from carti where titlu=@titlu";
+
+            using (StreamReader reader = new StreamReader(_imprumuturipath))
+            {
+                while (reader.Peek() > 0)
+                {
+                    string line = reader.ReadLine();
+                    var splitedline = line.Split('*');
+
+                    using (SqlCommand cmdFind = new SqlCommand(cmdFindId, con))
+                    {
+                        cmdFind.Parameters.AddWithValue("@titlu", splitedline[0]);
                         using (SqlDataReader reader1 = cmdFind.ExecuteReader())
                         {
                             reader1.Read();
                             idCarte = (int)reader1[0];
                         }
-                     }
+                    }
 
-                        using (SqlCommand cmd = new SqlCommand(cmdInsert, con))
-                        {
-                            cmd.Parameters.AddWithValue("@id", idCarte);
-                            cmd.Parameters.AddWithValue("@email", splitedline[1]);
-                             string dateString = splitedline[2].Trim();
-                            DateTime data = DateTime.ParseExact(dateString, "m/d/yyyy", null);
-                            cmd.Parameters.AddWithValue("@data", data);
-                            cmd.ExecuteNonQuery();
-                        }
+                    using (SqlCommand cmd = new SqlCommand(cmdInsert, con))
+                    {
+                        cmd.Parameters.AddWithValue("@id", idCarte);
+                        cmd.Parameters.AddWithValue("@email", splitedline[1]);
+                        string dateString = splitedline[2].Trim();
+                        DateTime data = DateTime.ParseExact(dateString, "m/d/yyyy", null);
+                        cmd.Parameters.AddWithValue("@data", data);
+                        cmd.ExecuteNonQuery();
                     }
                 }
-            
+            }
+
         }
 
         public static bool CheckEmail(string email)
@@ -136,11 +136,11 @@ namespace AplicatieFreeBook.DataAcces
             {
                 con.Open();
                 string cmdText = "Select * from utilizatori where email = @email";
-                using(SqlCommand cmd = new SqlCommand(cmdText, con))
+                using (SqlCommand cmd = new SqlCommand(cmdText, con))
                 {
                     cmd.Parameters.AddWithValue("@email", email);
-                    SqlDataReader reader= cmd.ExecuteReader();
-                    if(reader.HasRows) { return false; }
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    if (reader.HasRows) { return false; }
                     else return true;
                 }
             }
@@ -166,7 +166,7 @@ namespace AplicatieFreeBook.DataAcces
         public static UtilizatorModel GetUtilizator(string email, string pass)
         {
             UtilizatorModel utilizator = new UtilizatorModel();
-            using(SqlConnection con = new SqlConnection(_connectionstring)) 
+            using (SqlConnection con = new SqlConnection(_connectionstring))
             {
                 con.Open();
                 string cmdText = "Select * from utilizatori where email=@email and parola=@pass";
@@ -176,12 +176,12 @@ namespace AplicatieFreeBook.DataAcces
                     cmd.Parameters.AddWithValue("@pass", pass);
                     SqlDataReader reader = cmd.ExecuteReader();
                     reader.Read();
-                    if(reader.HasRows)
+                    if (reader.HasRows)
                     {
-                        utilizator.Email= reader[0].ToString();
+                        utilizator.Email = reader[0].ToString();
                         utilizator.Password = reader[1].ToString();
-                        utilizator.Nume= reader[2].ToString();
-                        utilizator.Prenume= reader[3].ToString();
+                        utilizator.Nume = reader[2].ToString();
+                        utilizator.Prenume = reader[3].ToString();
                     }
                 }
             }
@@ -190,18 +190,18 @@ namespace AplicatieFreeBook.DataAcces
 
         public static DataTable GetCartiDisponibile()
         {
-           
+
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Titlu");
             dataTable.Columns.Add("Autor");
             dataTable.Columns.Add("Gen");
-            using(SqlConnection con = new SqlConnection(_connectionstring))
+            using (SqlConnection con = new SqlConnection(_connectionstring))
             {
                 con.Open();
                 string cmdText = "Select * from carti";
-                using(SqlCommand cmd = new SqlCommand(cmdText, con)) 
+                using (SqlCommand cmd = new SqlCommand(cmdText, con))
                 {
-                    using(SqlDataReader reader = cmd.ExecuteReader()) 
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -247,16 +247,16 @@ namespace AplicatieFreeBook.DataAcces
 
         public static string[] CarteImprumut(int id)
         {
-            string[] detaliicarte= new string[2];
-            
-            using(SqlConnection  con = new SqlConnection(_connectionstring)) 
+            string[] detaliicarte = new string[2];
+
+            using (SqlConnection con = new SqlConnection(_connectionstring))
             {
                 con.Open();
                 string cmdText = "Select titlu, autor from carti where id_carte=@id";
                 using (SqlCommand cmd = new SqlCommand(cmdText, con))
                 {
-                    cmd.Parameters.AddWithValue("@id",id);
-                    using(SqlDataReader reader= cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         reader.Read();
                         detaliicarte[0] = reader[0].ToString();
@@ -265,20 +265,20 @@ namespace AplicatieFreeBook.DataAcces
                     }
                 }
             }
-            return detaliicarte; 
+            return detaliicarte;
         }
 
         public static int GetCarteId(string titlu)
         {
             int carteId = 0;
-            using(SqlConnection con = new SqlConnection(_connectionstring)) 
+            using (SqlConnection con = new SqlConnection(_connectionstring))
             {
                 con.Open();
                 string cmdText = "Select id_carte from carti where titlu=@titlu";
-                using(SqlCommand cmd= new SqlCommand(cmdText, con))
+                using (SqlCommand cmd = new SqlCommand(cmdText, con))
                 {
                     cmd.Parameters.AddWithValue("@titlu", titlu);
-                    using(SqlDataReader reader= cmd.ExecuteReader()) 
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
                         while (reader.Read()) { carteId = Convert.ToInt32(reader[0]); }
@@ -288,5 +288,76 @@ namespace AplicatieFreeBook.DataAcces
             return carteId;
         }
 
-    }
+        public static void InsertCarteIntoImprumut(CarteModel carteModel, string email)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionstring))
+            {
+                con.Open();
+                int carteId = GetCarteId(carteModel.Titlu);
+                string cmdText = "Insert  into imprumut (id_carte, email, data_imprumut) values (@idCarte, @email, @dataImprumut)";
+                using (SqlCommand cmd = new SqlCommand(cmdText, con))
+                {
+                    cmd.Parameters.AddWithValue("@idCarte", carteId);
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@dataImprumut", DateTime.Now);
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
+        public static List<CarteImprumutModel> GetImprumuturiPeAn(DateTime anStart, DateTime anStop)
+        {
+            List<CarteImprumutModel> imprumuturi = new List<CarteImprumutModel>();
+
+            using (SqlConnection conn = new SqlConnection(_connectionstring))
+            {
+                conn.Open();
+                string cmdText = "Select data_imprumut from imprumut where data_imprumut >= @anStart and data_imprumut <=@anEnd";
+                using (SqlCommand cmd = new SqlCommand(cmdText, conn))
+                {
+                    cmd.Parameters.AddWithValue("@anStart", anStart);
+                    cmd.Parameters.AddWithValue("@anEnd", anStop);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CarteImprumutModel carte = new CarteImprumutModel()
+                            {
+                                DataImprumut = (DateTime)reader[0] 
+                            };
+                            imprumuturi.Add(carte);
+                        }
+                    }
+                }
+            }
+
+
+
+            return imprumuturi;
+        }
+
+        public static List<string> GetCartiPopulare()
+        {
+            List <string> carti = new List<string>();
+            using(SqlConnection conn = new SqlConnection(_connectionstring)) 
+            {
+                conn.Open();
+                string cmdText = "Select titlu from carti c ,imprumut i where c.id_carte = i.id_carte;";
+                using(SqlCommand cmd = new SqlCommand(cmdText,conn))
+                {
+                    using(SqlDataReader  reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            carti.Add(reader[0].ToString());
+                        }
+                    }
+                }
+            }
+            
+            return carti;
+        }
+
+    } 
 }

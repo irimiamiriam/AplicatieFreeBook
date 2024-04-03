@@ -18,6 +18,8 @@ namespace AplicatieFreeBook.Forms
         public LogareFreeBook()
         {
             InitializeComponent();
+            emailtextBox.Text = "dana@gmail.com";
+            parolatextBox.Text = "dana";
         }
 
         private void Logarebutton_Click(object sender, EventArgs e)
